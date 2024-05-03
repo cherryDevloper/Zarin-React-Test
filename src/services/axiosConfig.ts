@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 
 //  OMDB (IMDB data)
 const omdbApi: AxiosInstance = axios.create({
-  baseURL: 'https://www.omdbapi.com/',
+  baseURL: import.meta.env.VITE_OMDB_API_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
@@ -11,7 +11,7 @@ const omdbApi: AxiosInstance = axios.create({
 
 //  CoinCap (crypto data)
 const coincapApi: AxiosInstance = axios.create({
-  baseURL: 'https://api.coincap.io/v2',
+  baseURL: import.meta.env.VITE_COINCAP_API_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
