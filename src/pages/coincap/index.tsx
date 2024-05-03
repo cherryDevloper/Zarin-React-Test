@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import WebSocketService from '../../services/WebsocketService';
 import Loading from '../../components/Loading';
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
+import Layout from '../../components/Layout';
+import { useNavigate } from 'react-router-dom';
 
-interface Message {
-  bitcoin: string;
-  ethereum?: string;
-}
 interface CoinData {
   name: string;
   price: number | undefined; // Since prices can be undefined
@@ -16,6 +14,7 @@ const initialCoinData: CoinData[] = [
   { name: 'ethereum', price: undefined },
 ];
 const CoinCap: React.FC = () => {
+  const navigate = useNavigate();
   const [coinData, setCoinData] = useState<CoinData[]>([]);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
@@ -53,6 +52,7 @@ const CoinCap: React.FC = () => {
       return error;
     }
   };
+
   useEffect(() => {
     const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
 
@@ -79,16 +79,34 @@ const CoinCap: React.FC = () => {
       wsService.close();
     };
   }, []);
+
   return (
-    <div className="w-full">
-      {isConnected && <Loading />}
-      <Table columns={columns} dataSource={coinData} rowKey="name" pagination={false} />{' '}
-      {/* Unique rowKey based on name */}
-    </div>
+    <Layout>
+      <Button
+        type="link"
+        onClick={() => navigate(-1)}
+        className="border p-4 bg-yellow-500 flex items-center justify-center"
+      >
+        Back to home
+      </Button>
+      <div className="w-full flex justify-center items-center">
+        {!isConnected && <Loading />}
+      </div>
+      <div>
+        <Table
+          loading={!isConnected}
+          columns={columns}
+          dataSource={coinData}
+          rowKey="name" //Unique rowKey based on name
+          pagination={false}
+        />{' '}
+      </div>{' '}
+    </Layout>
   );
 };
 
 export default CoinCap;
+
 const columns = [
   {
     title: 'name',
