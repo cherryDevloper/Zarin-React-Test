@@ -16,7 +16,7 @@ function Home() {
           to={'/coincap'}
           className="border p-4 bg-blue-400 flex items-center rounded-md shadow-md text-white "
         >
-          Coin Cap
+          CoinCap
         </Link>
         <Link
           to={'/IMDB'}

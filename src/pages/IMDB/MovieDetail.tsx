@@ -1,4 +1,4 @@
-import { Button, Image, Typography } from 'antd';
+import { Image, Typography } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout';
 
@@ -7,9 +7,9 @@ const MovieDetail = () => {
   const { state } = useLocation();
   if (!state) navigate(-1);
   const { movie } = state;
+
   return (
     <Layout>
-      <Button onClick={() => navigate(-1)}>{'<'} Back</Button>
       <div className="my-10">
         <Typography.Title>{movie.Title}</Typography.Title>
         <div className="flex justify-between">
