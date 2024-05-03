@@ -1,7 +1,6 @@
 import React, { lazy } from 'react';
 import Home from '../pages/home';
 import MovieDetail from '../pages/IMDB/MovieDetail';
-import App from '../App';
 
 export type RouteConfig = {
   path: string;
