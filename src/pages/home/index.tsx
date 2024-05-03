@@ -1,5 +1,14 @@
+import { Link } from 'react-router-dom';
+import Layout from '../../components/Layout';
+
 function Home() {
-  return <div>Home</div>;
+  return (
+    <Layout>
+      <div>
+        <Link to={'/coincap'}>Coin Cap</Link>
+      </div>
+    </Layout>
+  );
 }
 
 export default Home;
