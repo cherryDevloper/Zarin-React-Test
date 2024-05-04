@@ -25,6 +25,9 @@ function Home() {
           IMDB
         </Link>
       </div>
+      <Link to="https://github.com/cherryDevloper/Zarin-React-Test" replace>
+        Github - React.js
+      </Link>
     </GlassMorphismBackground>
   );
 }
