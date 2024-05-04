@@ -3,7 +3,10 @@ class WebSocketService {
   private socket!: WebSocket;
   private url: string;
   private reconnectionDelay = 3000;
+  private maxReconnectionDelay = 30000; // Maximum delay to avoid unbounded delay
+  private reconnectionAttempts = 0;
   private isReconnecting = false;
+
   private onOpenCallback: (() => void) | null = null;
   private onCloseCallback: (() => void) | null = null;
   private onMessageCallback: ((message: string) => void) | null = null;
@@ -19,6 +22,7 @@ class WebSocketService {
 
     this.socket.onopen = () => {
       this.isReconnecting = false;
+      this.reconnectionAttempts = 0; // Reset attempts on successful connection
       if (this.onOpenCallback) {
         this.onOpenCallback();
       }
@@ -34,27 +38,35 @@ class WebSocketService {
       if (this.onCloseCallback) {
         this.onCloseCallback();
       }
-
       if (!this.isReconnecting) {
-        this.isReconnecting = true;
-        setTimeout(() => {
-          this.connect();
-        }, this.reconnectionDelay);
+        this.reconnect();
       }
     };
-    //@ts-ignore
-    this.socket.onerror = (error: any) => {
+
+    this.socket.onerror = (error) => {
       if (this.onErrorCallback) {
+        //@ts-ignore
         this.onErrorCallback(error);
       }
-
       if (!this.isReconnecting) {
-        this.isReconnecting = true;
-        setTimeout(() => {
-          this.connect();
-        }, this.reconnectionDelay);
+        this.reconnect();
       }
     };
+  }
+
+  private reconnect() {
+    this.isReconnecting = true;
+    this.reconnectionAttempts += 1;
+
+    const delay = Math.min(
+      this.reconnectionDelay * Math.pow(2, this.reconnectionAttempts - 1),
+      this.maxReconnectionDelay,
+    );
+
+    setTimeout(() => {
+      this.connect();
+      this.isReconnecting = false;
+    }, delay);
   }
 
   public static getInstance(url: string): WebSocketService {
